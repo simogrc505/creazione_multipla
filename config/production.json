@@ -1,11 +1,12 @@
 {
   "db": {
-    "host": "mongodb://db:27017/app",
-    "options": {
-      "useNewUrlParser": true,
-      "useFindAndModify": false,
-      "useUnifiedTopology": true,
-      "autoIndex": false
+    "client": "mysql2",
+    "connection": {
+      "host": "db",
+      "port": "3306",
+      "user": "root",
+      "password": "root",
+      "database": "app_test"
     }
   },
   "log": {
@@ -14,5 +15,7 @@
       "req.headers.authorization"
     ]
   },
-  "host_name": "https://internal-user.universe.corley.it"
+  "endpoints": {
+    "user": "https://internal-user.universe.corley.it"
+  }
 }

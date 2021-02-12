@@ -1,46 +1,60 @@
-const { omit, toLower } = require('ramda')
-const { if_exists } = require('../../utilities/errors_code')
-const Book = require('../book')
+const Book = require('../book');
+const {map, toPairs, omit, tap} = require('ramda');
 
 module.exports = {
   list: (params) => {
-    let where = omit(['limit', 'offset', 'orderBy', 'page', 'order'], params)
-    return Promise.all([
-      Book
-        .find(where)
-        .skip((params.page - 1) * params.limit)
-        .limit(params.limit)
-        .sort({ [params.orderBy]: toLower(params.order) }),
-      Book.countDocuments(where)
-    ])
-      .then(([docs, total]) => {
-        return {
-          docs,
-          total,
-        }
-      })
+    let query = Book.query();
+
+    map(([key, value]) => {
+      query.where(key, value)
+    }, toPairs(omit(['page', 'limit', 'offset', 'orderBy', 'order'], params)));
+
+    return query
+      .limit(params.limit)
+      .offset(params.offset)
+      .orderBy(params.orderBy, params.order)
+      .skipUndefined()
+      .where(omit(['limit', 'offset', 'orderBy', 'page', 'order'], params))
   },
+
   get: (id) => {
-    return Book.findById({ _id: id })
-    .then(if_exists)
+    return Book
+      .query()
+      .where({id: id})
+      .first()
   },
 
   create: (body) => {
-    body.created_at = new Date()
-    return Book.create(body)
+    return Book.query().insert(body)
+    .then(book =>  {
+      return Book.query().where({id: book.id}).first()
+    })
   },
+
   update: (id, body) => {
-    body.edited_at = new Date()
-    return Book.Book.findById({ _id: id })
-      .then(if_exists)
-      .then(() => Book.findOneAndUpdate(id, body, { new: true }))
+    return Book
+      .query().where({id: id}).first().update(body)
+      .then(() => Book.query().where({id: id}).first())
   },
+
   delete: (id) => {
-    return Book.findById({ _id: id })
-      .then(if_exists)
-      .then((Book) => {
-        return Book.findOneAndRemove({ _id: id })
-          .then(() => Book)
-      })
+    return Book.query().where({id: id}).first()
+    .then(book => {
+      return Book.query().where({id: id}).del()
+      .then(() => book)
+    })
   },
-}
+
+  count: (params) => {
+    let query = Book.query()
+
+    map(([key, value]) => {
+      query.where(key, value)
+    }, toPairs(omit(['limit', 'offset', 'orderBy', 'page', 'order'], params)));
+
+    return query
+      .count('id as counts')
+      .first()
+  },
+
+};

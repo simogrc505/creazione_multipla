@@ -19,7 +19,9 @@ const bulk = () => {
       title: "title" + i,
       author: "author" + i,
       isbn: "isbn" + i,
-      genre: "genre" + i
+      genre: "genre" + i,
+      published: new Date(),
+      created_a
     })
   }
   return Promise.resolve(arr)

@@ -1,12 +1,27 @@
 {
   "db": {
-    "host": "mongodb://db:27017/app_test",
-    "options": {
-      "useNewUrlParser": true,
-      "useFindAndModify": false,
-      "useUnifiedTopology": true,
-      "autoIndex": false
-    }
+    "client": "mysql2",
+    "connection": {
+      "host": "db",
+      "port": "3306",
+      "user": "root",
+      "password": "root",
+      "database": "app_test"
+    },
+    "pool": {
+      "min": 0,
+      "max": 7
+    },
+    "migrations": {
+      "directory": "./priv/migrations"
+    },
+    "seeds": {
+      "directory": "./priv/seeds/dev"
+    },
+    "useNullAsDefault": true
+  },
+  "endpoints": {
+    "user": "https://internal-user.universe.corley.it"
   },
   "log": {
     "name": "app",
@@ -18,6 +33,5 @@
     "redact": [
       "req.headers.authorization"
     ]
-  },
-  "host_name": "https://internal-user.universe.corley.it"
+  }
 }

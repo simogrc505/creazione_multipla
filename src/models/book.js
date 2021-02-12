@@ -1,16 +1,23 @@
-const mongoose = require('mongoose')
-const uuid = require('node-uuid')
-const Schema = mongoose.Schema
+const config = require('config');
+const { Model } = require('objection');
 
-const schema = new Schema({
-  _id: {type: String, default: uuid.v4},
-  title: { type: String },
-  author: { type: String },
-  genre: { type: String },
-  isbn: { type: String },
-  created_at: { type: Date },
-  edited_at: { type: Date },
-}, {collection: 'books'})
+const Knex = require('knex');
 
+// Initialize knex.
+const knex = Knex(config.db);
+//knex.on('query', (i) => console.log(i.sql))
 
-module.exports = mongoose.model('Book', schema)
+// Give the knex object to objection.
+Model.knex(knex);
+
+// Person model.
+class Book extends Model {
+  static get tableName() {
+    return 'books';
+  }
+  static get idColumn() {
+    return 'id'
+  }
+}
+
+module.exports = Book;

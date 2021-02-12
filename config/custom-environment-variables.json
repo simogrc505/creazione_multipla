@@ -1,6 +1,14 @@
 {
-  "db": {
-    "host": "DB_HOST"
+  "db":  {
+    "connection": {
+      "host": "DB_HOST",
+      "user": "DB_USER",
+      "password": "DB_PASS",
+      "database": "DB_NAME"
+    }
+  },
+  "endpoints": {
+    "user": "ENDPOINT_USER"
   },
   "log": {
     "name": "SERVICE_NAME",
@@ -8,6 +16,5 @@
       "region": "AWS_REGION",
       "env": "NODE_ENV"
     }
-  },
-  "host_name": "API_HOST_NAME"
+  }
 }

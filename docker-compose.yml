@@ -1,17 +1,21 @@
-version: "3"
+version: '3'
 services:
   web:
     build: .
     ports:
       - "3060:3000"
-      # - "9229:9229"
+      - "9229:9229"
     command: ./node_modules/.bin/nodemon
     volumes:
       - .:/data
+      - $HOME/.aws:/root/.aws
     working_dir: /data
     environment:
       - NODE_ENV=development
+      - AWS_PROFILE=saml
   db:
-    image: mongo:3.6
+    image: mysql:5.7
     ports:
-      - 27017
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
