@@ -10,4 +10,3 @@ services:
     working_dir: /data
     environment:
       - NODE_ENV=development
-

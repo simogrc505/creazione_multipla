@@ -1,9 +1,13 @@
 {
+  "db": {
+    "host": "DB_HOST"
+  },
   "log": {
     "name": "SERVICE_NAME",
     "base": {
       "region": "AWS_REGION",
       "env": "NODE_ENV"
     }
-  }
+  },
+  "host_name": "API_HOST_NAME"
 }
