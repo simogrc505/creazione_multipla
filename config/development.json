@@ -1,14 +1,23 @@
 {
+  "db": {
+    "host": "mongodb://db:27017/app",
+    "options": {
+      "useNewUrlParser": true,
+      "useFindAndModify": false,
+      "useUnifiedTopology": true,
+      "autoIndex": false
+    }
+  },
   "log": {
     "name": "app",
     "base": {
       "region": "local",
       "env": "development"
     },
-    "enabled": false,
+    "enabled": true,
     "redact": [
       "req.headers.authorization"
     ]
-  }
+  },
+  "host_name": "https://internal-user.universe.corley.it"
 }
-

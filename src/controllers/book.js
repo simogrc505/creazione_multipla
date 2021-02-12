@@ -1,30 +1,40 @@
+const { compose, bind, prop, assoc, mergeDeepLeft, tap } = require('ramda')
 const error = require('../views/error')
 
 // UTILITIES
-const { headers } = require('../utilities/pagination')
-const { get_books } = require('../microservices/books')
+const { create_filters, append_headers } = require('../utilities/pagination')
 const { create_bulk_books, bulk } = require('../utilities')
+const repo = require('../models/repo/books')
+const view = require('../views/book')
 
 const list = (req, res) => {
-  return get_books()
-    .then(response => {
-      headers(res, response.headers)
-      return response.body
-    })
-    .then(result => res.status(200).json(result))
+  let params = compose(
+    mergeDeepLeft(req.query),
+    assoc('page', 1),
+    assoc('limit', 25),
+    assoc('orderBy', 'created_at'),
+    assoc('order', 'ASC')
+  )({})
+
+  return repo
+    .list(params)
+    .then(create_filters(params))// ASSOC OFFSET E LIMIT AL RISULTATO DA PASSARE AD APPEND HEADERS(PER SETTARE I VARI CUSTOM HEADERS)
+    .then(tap(append_headers(res)))
+    .then(prop('docs'))
+    .then(compose(bind(res.json, res), view.many))
     .catch(error.generic(res))
 }
 
 const bulk_create = (req, res) => {
   return create_bulk_books(req.body)
-    .then(result => res.status(201).json(result))
+    .then(result => res.status(201).json(view.many(result)))
     .catch(error.generic(res))
 }
 
 const generate_100 = (req, res) => {
   return bulk()
   .then(books => create_bulk_books(books))
-  .then(result => res.status(201).json(result))
+  .then(result => res.status(201).json(view.many(result)))
     .catch(error.generic(res))
 }
 

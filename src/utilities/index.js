@@ -1,11 +1,11 @@
 const { map } = require('ramda')
 const limit = require('p-limit')(1)
-const { create_book } = require('../microservices/books')
+const repo = require('../models/repo/books')
 
 const create_bulk_books = (books) => {
   let book_promises = map((book) =>
     limit(
-      () => create_book(book)
+      () => repo.create(book)
       // .then((book) => assoc('company', company, user))
     ), books)
 

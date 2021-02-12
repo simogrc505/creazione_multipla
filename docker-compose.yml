@@ -4,10 +4,14 @@ services:
     build: .
     ports:
       - "3060:3000"
+      # - "9229:9229"
     command: ./node_modules/.bin/nodemon
     volumes:
       - .:/data
     working_dir: /data
     environment:
       - NODE_ENV=development
-
+  db:
+    image: mongo:3.6
+    ports:
+      - 27017
