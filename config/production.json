@@ -1,0 +1,10 @@
+{
+  "log": {
+    "enabled": false,
+    "redact": [
+      "req.headers.authorization"
+    ]
+  }
+}
+
+

@@ -1,0 +1,14 @@
+{
+  "log": {
+    "name": "app",
+    "base": {
+      "region": "local",
+      "env": "development"
+    },
+    "enabled": false,
+    "redact": [
+      "req.headers.authorization"
+    ]
+  }
+}
+

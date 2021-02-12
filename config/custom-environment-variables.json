@@ -1,0 +1,9 @@
+{
+  "log": {
+    "name": "SERVICE_NAME",
+    "base": {
+      "region": "AWS_REGION",
+      "env": "NODE_ENV"
+    }
+  }
+}
